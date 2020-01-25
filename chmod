@@ -1,0 +1,3 @@
+chmod u+x src/mrm_description/src/execute_trajectories.py
+
+rosrun mrm_description execute_trajectories.py

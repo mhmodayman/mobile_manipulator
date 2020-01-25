@@ -1,0 +1,9 @@
+linking between this package and moveit package
+
+first delete the controller spawner of file ros_controller.launch
+
+and add the one of your preferred package
+
+then in addition to ros_controller.yaml file which should be loaded
+
+add the your controller yaml file too
