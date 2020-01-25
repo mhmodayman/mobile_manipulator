@@ -1,0 +1,48 @@
+# Publish all joint states -----------------------------------
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 125
+
+group_arm_controller:
+    type: "position_controllers/JointTrajectoryController"
+    joints:
+      - base_link__link_04
+      - link_04__link_05
+      - link_05__link_06
+      - link_06__link_07
+      - link_07__link_08
+      - link_08__link_09
+    constraints:
+      goal_time: 0.6
+      stopped_velocity_tolerance: 0.05
+#      base_link__link_04: {trajectory: 0.1, goal: 0.1}
+#      link_04__link_05:   {trajectory: 0.1, goal: 0.1}
+#      link_05__link_06:   {trajectory: 0.1, goal: 0.1}
+#      link_06__link_07:   {trajectory: 0.1, goal: 0.1}
+#      link_07__link_08:   {trajectory: 0.1, goal: 0.1}
+#      link_08__link_09:   {trajectory: 0.1, goal: 0.1}
+    stop_trajectory_duration: 0.5
+    state_publish_rate:  125
+    action_monitor_rate: 10
+
+# Velocity Controllers ---------------------------------------
+joint1_velocity_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: base_link__link_01
+joint2_velocity_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: base_link__link_02
+joint3_velocity_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: base_link__link_03
+
+/gazebo_ros_control/pid_gains:
+   base_link__link_01: {p: 28, i: 1, d: 0, i_clamp: 0}
+   base_link__link_02: {p: 28, i: 1, d: 0, i_clamp: 0}
+   base_link__link_03: {p: 28, i: 1, d: 0, i_clamp: 0}
+   base_link__link_04: {p: 1000, i: 5, d: 2, i_clamp: 2}
+   link_04__link_05:   {p: 1000, i: 5, d: 2, i_clamp: 2}
+   link_05__link_06:   {p: 1000, i: 5, d: 2, i_clamp: 2}
+   link_06__link_07:   {p: 1, i: 1, d: 0, i_clamp: 0}
+   link_07__link_08:   {p: 1, i: 1, d: 0, i_clamp: 0}
+   link_08__link_09:   {p: 1, i: 1, d: 0, i_clamp: 0}

@@ -1,0 +1,47 @@
+# Publish all joint states -----------------------------------
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+
+# Position Controllers ---------------------------------------
+joint4_position_controller:
+  type: effort_controllers/JointPositionController
+  joint: base_link__link_04
+  pid: {p: 50, i: 5, d: 0}
+joint5_position_controller:
+  type: effort_controllers/JointPositionController
+  joint: link_04__link_05
+  pid: {p: 50, i: 5, d: 0}
+joint6_position_controller:
+  type: effort_controllers/JointPositionController
+  joint: link_05__link_06
+  pid: {p: 50, i: 5, d: 0}
+joint7_position_controller:
+  type: effort_controllers/JointPositionController
+  joint: link_06__link_07
+  pid: {p: 50, i: 5, d: 0}
+joint8_position_controller:
+  type: effort_controllers/JointPositionController
+  joint: link_07__link_08
+  pid: {p: 50, i: 5, d: 0}
+joint9_position_controller:
+  type: effort_controllers/JointPositionController
+  joint: link_08__link_09
+  pid: {p: 1, i: 1, d: 0}
+
+
+# Velocity Controllers ---------------------------------------
+joint1_velocity_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: base_link__link_01
+joint2_velocity_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: base_link__link_02
+joint3_velocity_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: base_link__link_03
+
+/gazebo_ros_control/pid_gains:
+   base_link__link_01: {p: 0.0, i: 0.0, d: 0.0}
+   base_link__link_02: {p: 0.0, i: 0.0, d: 0.0}
+   base_link__link_03: {p: 0.0, i: 0.0, d: 0.0}

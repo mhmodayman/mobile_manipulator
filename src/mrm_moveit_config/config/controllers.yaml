@@ -1,0 +1,13 @@
+  controller_manager_ns: ''
+  controller_list:
+    - name: group_arm_controller
+      action_ns: follow_joint_trajectory
+      type: FollowJointTrajectory
+      default: true
+      joints:
+        - base_link__link_04
+        - link_04__link_05
+        - link_05__link_06
+        - link_06__link_07
+        - link_07__link_08
+        - link_08__link_09

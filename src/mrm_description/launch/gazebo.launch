@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+        <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+        <arg name="paused" default="false"/>
+        <arg name="use_sim_time" default="true"/>
+        <arg name="gui" default="true"/>
+        <arg name="headless" default="false"/>
+        <arg name="debug" default="false"/>
+
+        <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+        <include file="$(find gazebo_ros)/launch/empty_world.launch">
+          <arg name="debug" value="$(arg debug)" />
+          <arg name="gui" value="$(arg gui)" />
+          <arg name="paused" value="$(arg paused)"/>
+          <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+          <arg name="headless" value="$(arg headless)"/>
+        </include>
+
+    <group ns="/mrm">
+        
+        <!-- Robot model -->
+        <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find mrm_description)/urdf/mrm.xacro'" />
+        
+        <!-- Spawn the robot model -->
+        <node name="mybot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
+              args="-urdf -param robot_description -model mrm" />
+
+        <include file="$(find mrm_moveit_config)/launch/move_group.launch">
+          <arg name="publish_monitored_planning_scene" value="true" />
+        </include>
+
+        <!--The visualization component of MoveIt!-->
+        <!--  <include file="$(find mrm_moveit_config)/launch/moveit_rviz.launch"/>-->
+        <!--    <arg name="config" value="true"/>-->
+        <!--    <arg name="debug" value="false"/>-->
+
+        <!-- We do not have a robot connected, so publish fake joint states -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+          <param name="/use_gui" value="false"/> 
+          <rosparam param="/source_list">[/mrm/joint_states]</rosparam>
+        </node>
+
+        <!-- Load controllers -->
+        <rosparam command="load" file="$(find mrm_description)/config/joints.yaml" />
+        <rosparam command="load" file="$(find mrm_moveit_config)/config/controllers.yaml" />
+        
+        <!-- Controllers -->
+        <node name="controller_spawner" pkg="controller_manager" type="spawner"
+            respawn="false" output="screen" ns="/mrm"
+            args="--namespace=/mrm
+            joint_state_controller
+	    group_arm_controller
+            joint1_velocity_controller
+	    joint2_velocity_controller
+	    joint3_velocity_controller
+            --timeout 60">
+        </node>
+
+        <!-- convert joint states to TF transforms for rviz, etc -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+          <remap from="/joint_states" to="/mrm/joint_states" />
+        </node>
+        
+        <!-- rqt 
+        <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" />
+        <node name="rqt_publisher" pkg="rqt_publisher" type="rqt_publisher" /> -->
+
+        <!--node name="move_group_interface_tutorial" pkg="mrm_description" type="move_group_interface_tutorial" output="screen" /-->
+        
+        <node 
+           pkg="mrm_description" name="execute_trajectories2" type="execute_trajectories2.py" output="screen">
+        </node>
+
+        <!--node 
+           pkg="mrm_description" name="reachGoal" type="reachGoal.py" output="screen">
+        </node-->
+    
+    </group>
+          
+</launch>

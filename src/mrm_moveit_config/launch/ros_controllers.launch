@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <!--rosparam file="$(find mrm_moveit_config)/config/ros_controllers.yaml" command="load"/-->
+
+  <!-- Load controllers -->
+  <rosparam command="load" file="$(find mrm_description)/config/joints.yaml" />
+  <rosparam command="load" file="$(find mrm_moveit_config)/config/controllers.yaml" />
+
+  <!-- Controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+    respawn="false" output="screen" ns="/mrm"
+    args="--namespace=/mrm
+    joint_state_controller
+    group_arm_controller
+    joint1_velocity_controller
+    joint2_velocity_controller
+    joint3_velocity_controller
+    --timeout 60">
+  </node>
+
+
+</launch>
